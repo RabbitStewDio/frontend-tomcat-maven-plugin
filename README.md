@@ -1,8 +1,8 @@
 # Frontend maven plugin with Tomcat integration
 
-This plugin is based on Eirik Sletteberg's frontend-maven-plugin. Use this plugin for integration tests
-against J2EE web applications when you need a fully deployed Servlet container to provide the backend
-of your application.
+This plugin is based on [Eirik Sletteberg's frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin). 
+Use this plugin for integration tests against J2EE web applications when you need a fully deployed Servlet 
+container to provide the backend of your application.
 
 The plugin will start an embedded Tomcat 7 server and will deploy one or more WARs to the server. The
 WARs can be configured via a "Context.xml" file, which allows you to specify the JNDI configuration and
@@ -25,9 +25,6 @@ globally for your build system
 laptops, but backend developers can run a clean build without even installing Node on their computer.
 - Not meant to install Node for production uses. The Node usage is intended as part of a frontend build,
 running common javascript tasks such as minification, obfuscation, compression, packaging, testing etc.
-
-## Show me an example!
-[Here is an example for you!](https://github.com/eirslett/frontend-maven-plugin/tree/master/frontend-maven-plugin/src/it/example%20project)
 
 # Installing
 Include the plugin as a dependency in your Maven project.
@@ -169,7 +166,7 @@ Tomcat:
         <!-- 
         -->
         <config>
-            <docBase>${project.build.directory}</docBase>
+            <docBase>${project.basedir}</docBase>
             <!-- 
               Defines whether a default mapping for static content exists at the root of the
               web-server. This mapping will serve all content from the directory configured in 
@@ -181,6 +178,41 @@ Tomcat:
     </configuration>
 
 ```
+
+The following properties are available to configure the built-in Tomcat server.
+
++ _configureDefaultRoot_ (Boolean)  
+  Defines whether a default mapping for static content exists at the root of the web-server. 
+  This mapping will serve all content from the directory configured in the "docBase" property as well as content from any 
+  WebJar that is on the test-scope classpath. WebJars contain web-content in the META-INF/resources directory.
++ _docBase_ (String)  
+  Defines the root directory of an automatically generated context. The automatic context can be enable via the
+  `configureDefaultRoot` property.
++ _uriEncoding_ (String)  
+  Specify URIEncoding for connector
++ _enableCompression_ (Boolean)  
+   Enable GZIP compression on responses
++ _enableSSL_ (Boolean)  
+  Enables SSL compression. This requires that the SSL certificates are available in a trust-store and that the
+  TrustStore is correctly configured. Specify -Djavax.net.ssl.trustStore and -Djavax.net.ssl.trustStorePassword in JAVA_OPTS. 
+  Note: should not be used if a reverse proxy is terminating SSL for you (such as on Heroku)
++ _enableNaming_ (Boolean)  
+  Enables the JNDI subsystem. This parameter is implied if basic-auth is enabled.
++ _enableClientAuth_ (Boolean)  
+  Verifies the client's identity as part of the SSL protocol handshake. 
+  Specify -Djavax.net.ssl.keyStore and -Djavax.net.ssl.keyStorePassword in JAVA_OPTS
++ _enableBasicAuth_ (Boolean)  
+  Secure the app with basic auth. Specify the user information via the `userDatabaseLocation` property. 
++ _userDatabaseLocation_ (String)  
+  Location of the tomcat-users.xml file. Any relative path given will be interpreted as relative to the native 
+  working directory, which may not be the project directory. The file format is described in the 
+  [Tomcat Documentation](http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html#MemoryRealm).
++ _expandWar_ (Boolean)  
+  Expand the war file and set it as source
++ _sessionTimeout_ (Int)
+  The number of minutes of inactivity before a user's session is timed out.
++ _compressableMimeTypes_ (String)
+  Comma delimited list of mime types that will be compressed when using GZIP compression.
 
 ### Running Grunt
 It will run Grunt according to the `Gruntfile.js` in your working directory.
